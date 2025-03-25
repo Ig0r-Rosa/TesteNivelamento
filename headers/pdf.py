@@ -11,6 +11,9 @@
 import os
 import sys
 import requests
+import glob
+import pdfplumber
+import pandas as pd
 
 # (en)Library to extract data from HTML and XML files
 # (pt-br)Biblioteca para extrair dados de arquivos HTML e XML
@@ -28,7 +31,8 @@ class pdf(zip):
 
     # (en)Constructor
     # (pt-br)Construtor
-    def __init__(self, site = "", url= ""):
+    def __init__(self, site = "", url= "", path = ""):
+        self.__path = path
         self.__site = site
         self.__url = url
         self.__pdf_links = []
@@ -38,6 +42,7 @@ class pdf(zip):
     # (en)Find the links to the PDF files
     # (pt-br)Encontra os links para os arquivos PDF
     def findPdfLinks(self, link_name = []):
+
         # (en)Create a directory to store the downloaded files
         # (pt-br)Cria um diretório para armazenar os arquivos baixados
         os.makedirs("pdf", exist_ok=True)
@@ -134,4 +139,73 @@ class pdf(zip):
         self._files_to_zip = self.__pdf_files
         self.zip_files(zipFileName)
     
+
+    # (en)Find the PDF files from the path
+    # (pt-br)Encontra os arquivos PDF do caminho
+    def findPdfFromPath(self, nameFile = "/*.pdf", removeFiles = ""):
+        self.__pdf_files = glob.glob(self.__path + nameFile)
+
+        # (en)Remove files that contain removeFiles
+        # (pt-br)Remove arquivos que contém removeFiles
+        if removeFiles != "":
+            self.__pdf_files = [file for file in self.__pdf_files if removeFiles not in file]
+
+    
+    def extractTable(self, columns):
+
+        # (en)Check if there are PDF files
+        # (pt-br)Verifica se existem arquivos PDF
+        if self.__pdf_files:
+            # (en)Opening the PDF file
+            # (pt-br)Abrindo o arquivo PDF
+            with pdfplumber.open(self.__pdf_files[0]) as pdf:
+
+                # (en)List to store all extracted tables
+                # (pt-br)Lista para armazenar todas as tabelas extraídas
+                all_tables = []
+
+                # (en)Iterating through all pages of the PDF
+                # (pt-br)Iterar por todas as páginas do PDF
+                for page in pdf.pages:
+
+                    # (en)Extracting the table from the page
+                    # (pt-br)Extrair a tabela da página
+                    table = page.extract_table()
+
+                    # (en)Check if a table was successfully extracted
+                    # (pt-br)Verifique se uma tabela foi extraída com sucesso
+                    if table:
+                        # (en)Add the table to the list
+                        # (pt-br)Adicionar a tabela à lista
+                        all_tables.append(table)
+
+            # (en)Combine all tables into a single DataFrame (using pandas)
+            # (pt-br)Combine todas as tabelas em um único DataFrame (usando pandas)      
+            all_data = []
+            for table in all_tables:
+
+                # (en)Ignore the first line (header) repeated on each page
+                # (pt-br)Ignore a primeira linha (cabeçalho) repetida em cada página
+                for row in table[1:]:
+                    all_data.append(row)
+
+            # (en)Create the DataFrame
+            # (pt-br)Criar o DataFrame
+            df = pd.DataFrame(all_data, columns=columns)
+
+            # (en)Show the first lines to check if the extraction was done correctly
+            # (pt-br)Mostra as primeiras linhas para verificar se a extração foi feita corretamente
+            print(df.head())
+            
+            # (en)Return the DataFrame
+            # (pt-br)Retorna o DataFrame
+            return df
+        
+        else:
+            print("❌ No valid PDF files found!")
+            return None
+        
+
+
+
     

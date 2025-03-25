@@ -7,64 +7,36 @@
 
 # (en)Importing the necessary libraries
 # (pt-br)Importando as bibliotecas necessárias
-import pdfplumber
-import pandas as pd
 import os
-import glob
+import sys
 import zipfile
+
+# (en)Add the directory where the headers are located to sys.path
+# (pt-br)Adiciona o diretório onde os headers estão localizado ao sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# (en)Add headers to the code
+# (pt-br)Adiciona cabeçalhos para o código
+from headers.pdf import pdf
 
 # (en)Path to PDF file
 # (pt-br)Caminho para o arquivo PDF
-pdf_path = "../1_teste_de_web_scraping/downloads/"
+pdf_manipulate = pdf(
+    "", # Site
+    "", # URL
+    "../1_teste_de_web_scraping/pdf/" # Path
+    )
 
 # (en)Finding all PDF files in the directory have the word "Anexo_I" in the name
-# (pt-br)Encontrando todos os arquivos PDF no diretório que possuem a palavra "Anexo_I" no nome
-pdf_files = glob.glob(os.path.join(pdf_path, "*Anexo_I*.pdf"))
-
-# (en)Filtering files that contain 'Anexo_II' (if they exist)
-# (pt-br)Filtrar os arquivos que contenham 'Anexo_II' (caso existam)
-pdf_files = [file for file in pdf_files if "Anexo_II" not in file]
+# Also filters if the file contains 'Anexo_II' (if they exist)
+# (pt-br)Encontrando todos os arquivos PDF no diretório que possuem a palavra "Anexo_I" no nome.
+# Também filtra se o arquivo contém 'Anexo_II' (caso exista)
+pdf_manipulate.findPdfFromPath("*Anexo_I*.pdf", "Anexo_II")
 
 # (en)Check if we found any valid files
 # (pt-br)Verificando se encontramos arquivos válidos
-if pdf_files:
-
-    # (en)Opening the PDF file
-    # (pt-br)Abrindo o arquivo PDF
-    with pdfplumber.open(pdf_files[0]) as pdf:
-
-        # (en)List to store all extracted tables
-        # (pt-br)Lista para armazenar todas as tabelas extraídas
-        all_tables = []
-
-        # (en)Iterating through all pages of the PDF
-        # (pt-br)Iterar por todas as páginas do PDF
-        for page in pdf.pages:
-
-            # (en)Extracting the table from the page
-            # (pt-br)Extrair a tabela da página
-            table = page.extract_table()
-
-            # (en)Check if a table was successfully extracted
-            # (pt-br)Verifique se uma tabela foi extraída com sucesso
-            if table:
-                # (en)Add the table to the list
-                # (pt-br)Adicionar a tabela à lista
-                all_tables.append(table)
-
-# (en)Combine all tables into a single DataFrame (using pandas)
-# (pt-br)Combine todas as tabelas em um único DataFrame (usando pandas)
-all_data = []
-for table in all_tables:
-
-    # (en)Ignore the first line (header) repeated on each page
-    # (pt-br)Ignore a primeira linha (cabeçalho) repetida em cada página
-    for row in table[1:]:
-        all_data.append(row)
-
-# (en)Create the DataFrame
-# (pt-br)Criar o DataFrame
-df = pd.DataFrame(all_data, columns=[
+df = pdf_manipulate.extractTable(
+    [
     "Procedimento", 
     "RN", 
     "Vigência", 
@@ -78,11 +50,8 @@ df = pd.DataFrame(all_data, columns=[
     "SubGrupo",
     "Grupo",
     "Capítulo"
-    ])
-
-# (en)Show the first lines to check if the extraction was done correctly
-# (pt-br)Mostra as primeiras linhas para verificar se a extração foi feita corretamente
-print(df.head())
+    ]
+)
 
 # (en)Save the extracted data to a CSV file
 # (pt-br)Salvar os dados extraídos em um arquivo CSV
