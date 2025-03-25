@@ -18,6 +18,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # (pt-br)Adiciona cabeçalhos para o código
 from headers.pdf import pdf
 from headers.csv import csv
+from headers.filter_words import get_first_two_words
 
 # (en)Path to PDF file
 # (pt-br)Caminho para o arquivo PDF
@@ -27,11 +28,15 @@ pdf_manipulate = pdf(
     "../1_teste_de_web_scraping/pdf/" # Path
     )
 
-# (en)Finding all PDF files in the directory have the word "Anexo_I" in the name
+# (en)Finding all PDF files in the directory have the word "Anexo_I" in the name.
 # Also filters if the file contains 'Anexo_II' (if they exist)
 # (pt-br)Encontrando todos os arquivos PDF no diretório que possuem a palavra "Anexo_I" no nome.
 # Também filtra se o arquivo contém 'Anexo_II' (caso exista)
 pdf_manipulate.findPdfFromPath("*Anexo_I*.pdf", "Anexo_II")
+
+# (en)Find the fields of the subtitles "OD" and "AMB"
+# (pt-br)Procura os campos da legendas "OD" e "AMB"
+complete_description = pdf_manipulate.findIn("Legenda:", ["OD", "AMB"])
 
 # (en)Check if we found any valid files
 # (pt-br)Verificando se encontramos arquivos válidos
@@ -40,8 +45,8 @@ df = pdf_manipulate.extractTable(
     "Procedimento", 
     "RN", 
     "Vigência", 
-    "OD",
-    "AMB",
+    get_first_two_words(complete_description["OD"]),
+    get_first_two_words(complete_description["AMB"]),
     "HCO",
     "HSO",  
     "REF",
