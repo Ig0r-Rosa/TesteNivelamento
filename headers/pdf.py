@@ -8,7 +8,7 @@
 
 # (en)Import the required libraries
 # (pt-br)Importa as bibliotecas necessárias
-import os
+import os.path
 import sys
 import requests
 import glob

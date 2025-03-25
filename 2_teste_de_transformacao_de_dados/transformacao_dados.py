@@ -9,7 +9,6 @@
 # (pt-br)Importando as bibliotecas necessárias
 import os
 import sys
-import zipfile
 
 # (en)Add the directory where the headers are located to sys.path
 # (pt-br)Adiciona o diretório onde os headers estão localizado ao sys.path
@@ -18,6 +17,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 # (en)Add headers to the code
 # (pt-br)Adiciona cabeçalhos para o código
 from headers.pdf import pdf
+from headers.csv import csv
 
 # (en)Path to PDF file
 # (pt-br)Caminho para o arquivo PDF
@@ -55,26 +55,13 @@ df = pdf_manipulate.extractTable(
 
 # (en)Save the extracted data to a CSV file
 # (pt-br)Salvar os dados extraídos em um arquivo CSV
-csv_path = "./data/dados_extraidos.csv"
+csv_manipulate = csv(
+    df,
+    "dados_extraidos"
+    )
 
-# (en)Ensure the 'data' directory exists before saving the CSV
-# (pt-br)Garantir que o diretório 'data' exista antes de salvar o arquivo CSV
-os.makedirs(os.path.dirname(csv_path), exist_ok=True)
-df.to_csv(csv_path, index=False)
-
-#(en)Directory of csv file
-#(pt-br)Diretório do arquivo csv
-print(f"✅ Data save in: {csv_path}")
+csv_manipulate.saveCsv()
 
 # (en)Name of the ZIP file
 # (pt-br)Nome do arquivo ZIP
-zip_filename = "./Teste_Igor-de-Matos-da-Rosa.zip"
-
-# (en)Compress the CSV into the ZIP file
-# (pt-br)Compactar o CSV no arquivo ZIP
-with zipfile.ZipFile(zip_filename, "w") as zipf:
-    zipf.write(csv_path, "dados_extraidos.csv")
-
-# (en)Show the message that the ZIP file was created
-# (pt-br)Mostra a mensagem que o arquivo ZIP foi criado
-print(f"✅ ZIP created in: {zip_filename}")
+csv_manipulate.setTheZipAndZip("Teste_Igor-de-Matos-da-Rosa.zip")
