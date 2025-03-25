@@ -21,6 +21,8 @@ from headers.zip import zip
 
 class csv(zip):
     
+    # (en)Constructor
+    # (pt-br)Construtor
     def __init__(self, data, name = ""):
         self.__dataFrame = data
         self.__path = "./data/" + name + ".csv"
@@ -39,6 +41,12 @@ class csv(zip):
             # (pt-br)Mostra o caminho do arquivo CSV
             print(f"\n✅ The CSV file is created in directory {self.__path}!")
 
+
+    # (en)Set the files to zip and zip
+    # (pt-br)Define os arquivos para zipar e zipa
     def setTheZipAndZip(self, zip_name = ".zip"):
          self._files_to_zip = [self.__path]
          self.zip_files(zip_name)
+
+
+    

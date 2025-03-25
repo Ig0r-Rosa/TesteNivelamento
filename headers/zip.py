@@ -13,9 +13,14 @@ from os import path
 
 class zip:
 
+    # (en)Constructor
+    # (pt-br)Construtor
     def __init__(self):
         self._files_to_zip = []
 
+
+    # (en)Add files to the list to be zipped and zip
+    # (pt-br)Adiciona arquivos à lista para serem zipados e zipa
     def zip_files(self, zip_name, zip_folder = "/"):
 
         # (en)If the folder does not exist, create it

@@ -206,6 +206,29 @@ class pdf(zip):
             return None
         
 
+    # (en)Find the legends in the PDF files
+    # (pt-br)Encontra as legendas nos arquivos PDF
+    def findIn(self, findField = "" ,fields = []):
+        legends = {}
+        for file in self.__pdf_files:
+            with pdfplumber.open(file) as pdf:
+                for page in pdf.pages:
+                    text = page.extract_text()
 
+                    # (en)Search for keywords and capture the descriptions
+                    # (pt-br)Procura pelas palavras-chave e captura as descrições
+                    if findField in text:
+                        for field in fields:
+                            # (en)Ensure the field is found after the findField keyword
+                            # (pt-br)Verifica se o campo é encontrado após a palavra-chave findField
+                            if field in text:
+                                try:
+                                    # (en)Capture the description after the field and handle exceptions
+                                    # (pt-br)Captura a descrição após o campo e trata exceções
+                                    start_idx = text.split(findField)[1]
+                                    legends[field] = start_idx.split(field)[1].split("\n")[0].strip()
+                                except IndexError:
+                                    legends[field] = "Descrição não encontrada"
+        return legends
 
     
