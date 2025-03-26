@@ -133,6 +133,7 @@ class pdf(zip):
     def getPdfLinks(self):
         return self.__pdf_links
     
+    
     # (en)Set the files to zip and zip
     # (pt-br)Define os arquivos para zipar e zipa
     def setFileToZipAndZip(self, zipFileName = "pdf.zip"):
@@ -156,6 +157,7 @@ class pdf(zip):
         # (en)Check if there are PDF files
         # (pt-br)Verifica se existem arquivos PDF
         if self.__pdf_files:
+
             # (en)Opening the PDF file
             # (pt-br)Abrindo o arquivo PDF
             with pdfplumber.open(self.__pdf_files[0]) as pdf:
@@ -219,10 +221,12 @@ class pdf(zip):
                     # (pt-br)Procura pelas palavras-chave e captura as descrições
                     if findField in text:
                         for field in fields:
+
                             # (en)Ensure the field is found after the findField keyword
                             # (pt-br)Verifica se o campo é encontrado após a palavra-chave findField
                             if field in text:
                                 try:
+
                                     # (en)Capture the description after the field and handle exceptions
                                     # (pt-br)Captura a descrição após o campo e trata exceções
                                     start_idx = text.split(findField)[1]
