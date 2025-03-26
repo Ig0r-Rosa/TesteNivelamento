@@ -155,6 +155,8 @@ class pdf(zip):
             self.__pdf_files = [file for file in self.__pdf_files if removeFiles not in file]
     # -------------------- #
     
+    # (en)Extract to table the pdf data
+    # (pt-br)Extrai para uma tabela os dados do pdf
     def extractTable(self, columns):
 
         # (en)Check if there are PDF files
