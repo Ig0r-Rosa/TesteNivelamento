@@ -37,7 +37,7 @@ class pdf(zip):
         self.__url = url
         self.__pdf_links = []
         self.__pdf_files = []
-
+    # -------------------- #
 
     # (en)Find the links to the PDF files
     # (pt-br)Encontra os links para os arquivos PDF
@@ -84,7 +84,7 @@ class pdf(zip):
         # (pt-br)Mostra os links dos PDFs
         for pdf_link in self.__pdf_links:
             print("📌 Link:", pdf_link)
-
+    # -------------------- #
 
     # (en)Download the PDF files
     # (pt-br)Armazena os links para os arquivos PDF
@@ -123,26 +123,26 @@ class pdf(zip):
                 self.__pdf_files.append(pdf_path)
         except Exception as e:
             print(f"Erro ao baixar os arquivos PDF: {e}")
-
+    # -------------------- #
 
     # (en)Get the PDF files
     # (pt-br)Obtém os arquivos PDF
     def getPdfFiles(self):
         return self.__pdf_files
-    
+    # -------------------- #
 
     # (en)Get the PDF links
     # (pt-br)Obtém os links dos PDFs
     def getPdfLinks(self):
         return self.__pdf_links
-    
+    # -------------------- #
     
     # (en)Set the files to zip and zip
     # (pt-br)Define os arquivos para zipar e zipa
     def setFileToZipAndZip(self, zipFileName = "pdf.zip"):
         self._files_to_zip = self.__pdf_files
         self.zip_files(zipFileName)
-    
+    # -------------------- #
 
     # (en)Find the PDF files from the path
     # (pt-br)Encontra os arquivos PDF do caminho
@@ -153,7 +153,7 @@ class pdf(zip):
         # (pt-br)Remove arquivos que contém removeFiles
         if removeFiles != "":
             self.__pdf_files = [file for file in self.__pdf_files if removeFiles not in file]
-
+    # -------------------- #
     
     def extractTable(self, columns):
 
@@ -209,7 +209,7 @@ class pdf(zip):
         else:
             print("❌ No valid PDF files found!")
             return None
-        
+    # -------------------- #
 
     # (en)Find the legends in the PDF files
     # (pt-br)Encontra as legendas nos arquivos PDF
@@ -237,5 +237,5 @@ class pdf(zip):
                                 except IndexError:
                                     legends[field] = "Descrição não encontrada"
         return legends
-
+    # -------------------- #
     
