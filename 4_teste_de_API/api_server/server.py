@@ -9,15 +9,30 @@
 # (pt-br)Importa as bibliotecas necessárias
 from flask import Flask, jsonify, request
 import pandas as pd
+from flask_cors import CORS
 
 # (en)Initializing the Flask application
 # (pt-br)Inicia o aplicativo Flask
 app = Flask(__name__)
 
+# (en)Enable CORS for all routes
+# (pt-br)Habilita CORS para todas as rotas
+CORS(app, resources={
+    r"/search_*": {
+        "origins": "*",  # (en) Allow all origins / (pt-br) Permite todas as origens
+        "methods": ["GET"],  # (en) Allowed methods / (pt-br) Métodos permitidos
+        "allow_headers": ["Content-Type"]  # (en) Allowed headers / (pt-br) Cabeçalhos permitidos
+    }
+})
+
 # (en) Load the CSV data
 # (pt-br) Carregar os dados do arquivo CSV
 # Ensure the file path is correct, and delimiters are appropriately set.
-df = pd.read_csv('./data/Relatorio_cadop.csv', delimiter=';')
+try:
+    df = pd.read_csv('./data/Relatorio_cadop.csv', delimiter=';', encoding='utf-8')
+except Exception as e:
+    print(f"Error loading CSV file: {e}")
+    df = pd.DataFrame()  # (en) Empty dataframe as fallback / (pt-br) Dataframe vazio como fallback
 
 # (en)Search all fields in .csv file
 # (pt-br)Pesquisa em todos os campos do arquivo .csv
