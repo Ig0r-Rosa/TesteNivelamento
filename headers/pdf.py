@@ -90,36 +90,39 @@ class pdf(zip):
     # (pt-br)Armazena os links para os arquivos PDF
     def downloadPdf(self):
 
-        # (en)Create a directory to store the downloaded files
-        # (pt-br)Cria um diretório para armazenar os arquivos baixados
-        os.makedirs("pdf", exist_ok=True)
+        try:
+            # (en)Create a directory to store the downloaded files
+            # (pt-br)Cria um diretório para armazenar os arquivos baixados
+            os.makedirs("pdf", exist_ok=True)
 
-        # (en)Download the PDF files
-        # (pt-br)Baixa os arquivos PDF
-        for pdf_link in self.__pdf_links:
-            pdf_name = pdf_link.split("/")[-1]
-            pdf_path = os.path.join("pdf", pdf_name)
+            # (en)Download the PDF files
+            # (pt-br)Baixa os arquivos PDF
+            for pdf_link in self.__pdf_links:
+                pdf_name = pdf_link.split("/")[-1]
+                pdf_path = os.path.join("pdf", pdf_name)
 
-            # (en)Send a request to the PDF link
-            # (pt-br)Envia uma requisição para o link do PDF
-            response = requests.get(pdf_link)
+                # (en)Send a request to the PDF link
+                # (pt-br)Envia uma requisição para o link do PDF
+                response = requests.get(pdf_link)
 
-            # (en)Check if the request was successful
-            # (pt-br)Verifica se a requisição foi bem sucedida
-            response.raise_for_status()
+                # (en)Check if the request was successful
+                # (pt-br)Verifica se a requisição foi bem sucedida
+                response.raise_for_status()
 
-            # (en)Save the PDF file
-            # (pt-br)Salva o arquivo PDF
-            with open(pdf_path, "wb") as pdf_file:
-                pdf_file.write(response.content)
+                # (en)Save the PDF file
+                # (pt-br)Salva o arquivo PDF
+                with open(pdf_path, "wb") as pdf_file:
+                    pdf_file.write(response.content)
 
-            # (en)Show the path of the downloaded PDF file
-            # (pt-br)Mostra o caminho do arquivo PDF baixado
-            print(f"\n✅ The PDF file is downloaded in directory {pdf_path}!")
+                # (en)Show the path of the downloaded PDF file
+                # (pt-br)Mostra o caminho do arquivo PDF baixado
+                print(f"\n✅ The PDF file is downloaded in directory {pdf_path}!")
 
-            # (en)Add the path to the list
-            # (pt-br)Adiciona o caminho à lista
-            self.__pdf_files.append(pdf_path)
+                # (en)Add the path to the list
+                # (pt-br)Adiciona o caminho à lista
+                self.__pdf_files.append(pdf_path)
+        except Exception as e:
+            print(f"Erro ao baixar os arquivos PDF: {e}")
 
 
     # (en)Get the PDF files
