@@ -15,3 +15,4 @@ import re
 def get_first_two_words(text):
     words = re.findall(r'\b\w+\b', text)
     return ' '.join(words[:2])
+# -------------------- #

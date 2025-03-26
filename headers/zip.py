@@ -17,7 +17,7 @@ class zip:
     # (pt-br)Construtor
     def __init__(self):
         self._files_to_zip = []
-
+    # -------------------- #
 
     # (en)Add files to the list to be zipped and zip
     # (pt-br)Adiciona arquivos à lista para serem zipados e zipa
@@ -37,4 +37,4 @@ class zip:
         # (en)Show the path of the ZIP file
         # (pt-br)Mostra o caminho do arquivo ZIP
         print(f"\n✅ The Zip file is created in directory {zip_folder + zip_name}!")
-            
+    # -------------------- #
